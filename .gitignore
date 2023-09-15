@@ -3,6 +3,15 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# ignore pngs
+*.png
+# ignore txt
+*.txt
+# ignore pdfs
+*.pdf
+# ignore files
+*.zip
+
 # User-specific files
 *.rsuser
 *.suo
