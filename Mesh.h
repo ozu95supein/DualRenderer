@@ -1,26 +1,19 @@
-#ifndef MESH_H
-#define MESH_H
-
-#include<string>
-
-#include"VAO.h"
-#include"EBO.h"
-#include"Camera.h"
-#include"Texture.h"
-
-class Mesh
-{
+#pragma once
+#include "Primitive.h"
+#include "Material.h"
+#include "Texture.h"
+#include <vector>
+class Mesh {
 public:
-	std::vector <Vertex> vertices;
-	std::vector <GLuint> indices;
-	std::vector <Texture> textures;
-	// Store VAO in public so it can be used in the Draw function
-	VAO VAO;
-
-	// Initializes the mesh
-	Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures);
-
-	// Draws the mesh
-	void Draw(Shader& shader, Camera& camera);
+	Mesh() {}
+	Mesh(std::vector<Triangle*> primitives, Material mat, Texture mMeshTexture, Texture mMeshNormalMap, Texture mMeshSpecularMap);
+private:
+	//this will just be an array of triangles for now
+	std::vector<Triangle*> mObjPrimitives;
+	// Every Mesh will have 1 material, default or otherwose, may be ignored if there are textures
+	Material mMeshMaterial;
+	//multiple textures for multiple different parts of the shader
+	Texture mMeshTexture;
+	Texture mMeshNormalMap;
+	Texture mMeshSpecularMap;
 };
-#endif

@@ -1,5 +1,7 @@
-#include"Mesh.h"
+#include<glad/glad.h>
 
+#include<GLFW/glfw3.h>
+#include<iostream>
 const unsigned int window_width = 800;
 const unsigned int window_height = 800;
 
