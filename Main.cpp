@@ -2,6 +2,7 @@
 
 #include<GLFW/glfw3.h>
 #include<iostream>
+#include"MeshLoader.h"
 const unsigned int window_width = 800;
 const unsigned int window_height = 800;
 
@@ -40,6 +41,22 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	// Specify the color of the background
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+
+	//now we try and load a mesh and render it
+	std::vector<Triangle> MeshTriangles;
+	LoadMeshFromFile("Cube.obj", MeshTriangles);
+	//Generate and bind a vertex array object
+	GLuint cubeVAO;
+	glGenVertexArrays(1, &cubeVAO);
+	glBindVertexArray(cubeVAO);
+
+
+	//generate the vertexbuffer object and bind it
+	unsigned int meshVBO;
+	glGenBuffers(1, &meshVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(MeshTriangles), MeshTriangles.data(), GL_STATIC_DRAW);
+
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
