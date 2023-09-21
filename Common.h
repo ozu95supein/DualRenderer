@@ -18,4 +18,5 @@ struct Vertex
 	glm::vec3 normal;
 	glm::vec2 texUV;
 	Vertex(glm::vec3 iposition, glm::vec3 inormal, glm::vec2 itexUV) : position(iposition), normal(inormal), texUV(itexUV) {}
+	Vertex() : position(glm::vec3(0,0,0)), normal(glm::vec3(0,0,0)), texUV(0,0){}
 };

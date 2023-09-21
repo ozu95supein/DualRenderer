@@ -36,7 +36,10 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
 
             //this will store the vertices in the face as they come up
             glm::vec3 verts[3];
-
+            //this stores the normals as they come up
+            glm::vec3 normals[3];
+            //this will store the UVs of the face vertices as they come up
+            glm::vec2 uvs[3];
             // Loop over vertices in the face.
             for (size_t v = 0; v < fv; v++)
             {
@@ -56,19 +59,32 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
                     tinyobj::real_t nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
                     tinyobj::real_t ny = attrib.normals[3 * size_t(idx.normal_index) + 1];
                     tinyobj::real_t nz = attrib.normals[3 * size_t(idx.normal_index) + 2];
+                    normals[v].x = nx;
+                    normals[v].y = ny;
+                    normals[v].z = nz;
                 }
-
+                else
+                {
+                    normals[v].x = 0.0f;
+                    normals[v].y = 0.0f;
+                    normals[v].z = 0.0f;
+                }
                 //I will need this in the future
                 // Check if `texcoord_index` is zero or positive. negative = no texcoord data
                 if (idx.texcoord_index >= 0) {
                     tinyobj::real_t tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
                     tinyobj::real_t ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+                    uvs[v].x = tx;
+                    uvs[v].y = ty;
                 }
 
             }
             index_offset += fv;
-
-            Triangle currentT(verts[0], verts[1], verts[2]);
+            Vertex iv0 = Vertex(verts[0], normals[0], uvs[0]);
+            Vertex iv1 = Vertex(verts[1], normals[1], uvs[1]);
+            Vertex iv2 = Vertex(verts[2], normals[2], uvs[2]);
+            //Vertex(glm::vec3 iposition, glm::vec3 inormal, glm::vec2 itexUV) 
+            Triangle currentT(iv0, iv1, iv2);
             mTriangles.push_back(currentT);
 
             // per-face material
