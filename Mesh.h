@@ -42,7 +42,7 @@ public:
 		glGenBuffers(1, &mMeshVBO);
 		// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 		glBindVertexArray(mMeshVAO);
-
+		//link VBO
 		glBindBuffer(GL_ARRAY_BUFFER, mMeshVBO);
 		glBufferData(GL_ARRAY_BUFFER, (sizeof(float) * mMeshData.size()), mMeshData.data(), GL_STATIC_DRAW);
 		// position attribute
@@ -50,11 +50,12 @@ public:
 		glEnableVertexAttribArray(0);
 		//normal attribute
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		//texture uv attribute
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(2);
 		//unbind for now
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
 	}
@@ -74,6 +75,15 @@ public:
 	{
 		//this should be equal to the number of floats in mesh data which is the number of meshtriangles times 24
 		return mMeshData.size();
+	}
+	void BindMeshVAO() 
+	{
+		glBindVertexArray(mMeshVAO);
+	}
+	void Draw()
+	{
+		unsigned int vertices = 3 * mTriangleNumber;
+		glDrawArrays(GL_TRIANGLES, 0, vertices);
 	}
 private:
 	//This is saved for ease of access and later raycast construction

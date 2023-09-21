@@ -3,29 +3,11 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
 #include "MeshLoader.h"
-#include "Mesh.h"
+#include "RenderableObject.h"
+#include "Shader.h"
+
 const unsigned int window_width = 800;
 const unsigned int window_height = 800;
-
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-const char* fragmentShader1Source = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n\0";
-const char* fragmentShader2Source = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-"}\n\0";
 
 int main()
 {
@@ -56,32 +38,7 @@ int main()
 	// Specify the viewport of OpenGL in the Window
 	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
 	glViewport(0, 0, window_width, window_height);
-	// TODO replace this code with my own...
-	// build and compile our shader program 
-	// ------------------------------------
-	// we skipped compile log checks this time for readability (if you do encounter issues, add the compile-checks! see previous code samples)
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	unsigned int fragmentShaderOrange = glCreateShader(GL_FRAGMENT_SHADER); // the first fragment shader that outputs the color orange
-	unsigned int fragmentShaderYellow = glCreateShader(GL_FRAGMENT_SHADER); // the second fragment shader that outputs the color yellow
-	unsigned int shaderProgramOrange = glCreateProgram();
-	unsigned int shaderProgramYellow = glCreateProgram(); // the second shader program
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	glShaderSource(fragmentShaderOrange, 1, &fragmentShader1Source, NULL);
-	glCompileShader(fragmentShaderOrange);
-	glShaderSource(fragmentShaderYellow, 1, &fragmentShader2Source, NULL);
-	glCompileShader(fragmentShaderYellow);
-	// link the first program object
-	glAttachShader(shaderProgramOrange, vertexShader);
-	glAttachShader(shaderProgramOrange, fragmentShaderOrange);
-	glLinkProgram(shaderProgramOrange);
-	// then link the second program object using a different fragment shader (but same vertex shader)
-	// this is perfectly allowed since the inputs and outputs of both the vertex and fragment shaders are equally matched.
-	glAttachShader(shaderProgramYellow, vertexShader);
-	glAttachShader(shaderProgramYellow, fragmentShaderYellow);
-	glLinkProgram(shaderProgramYellow);
-	//...
-
+	/// --- MESHES
 	//now we try and load a mesh and render it
 	std::vector<Triangle> MeshTriangles;
 	LoadMeshFromFile("Cube.obj", MeshTriangles);
@@ -90,6 +47,17 @@ int main()
 	std::cout << cubeMesh.GetTriangleNumber() << " Triangles in the cube" << std::endl;
 	std::cout << cubeMesh.GetSizeOfMeshData() << " Triangles in the cube" << std::endl;
 
+	/// --- SHADERS
+	// Generates Shader object using shaders default.vert and default.frag
+	Shader shaderProgram("default.vert", "default.frag");
+	
+	// --- RENDERABLE
+	glm::vec3 objectPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::mat4 objectModel = glm::mat4(1.0f);
+	objectModel = glm::translate(objectModel, objectPos);
+	RenderableObject renderCube(&cubeMesh, objectModel);
+
+	/// --- BUFFERS AND DEPTH
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 	// Specify the color of the background
@@ -99,6 +67,11 @@ int main()
 	{
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//activate the shader program
+		shaderProgram.Activate();
+		//bind the VAO of the mesh in the object
+		renderCube.BindMeshVAO();
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
