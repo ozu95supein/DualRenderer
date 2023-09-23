@@ -12,18 +12,15 @@ public:
 	RenderableObject(Mesh* inputMesh, glm::mat4 inputMat)
 	{
 		mMesh = inputMesh;
-		mModelMat = inputMat;
-	}
-	void BindMeshVAO()
-	{
-		mMesh->BindMeshVAO();
+		mTransform = inputMat;
 	}
 	void Draw()
 	{
+		mMesh->BindMeshVAO();
 		mMesh->Draw();
 	}
 	//we are going to use this a ton anyways so i just make it public
-	glm::mat4 mModelMat;
+	glm::mat4 mTransform;
 private:
 	Mesh * mMesh;
 };

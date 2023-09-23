@@ -4,6 +4,7 @@ class Mesh {
 public:
 	Mesh(std::vector<Triangle>& inputTriangles)
 	{
+		mModelMatrix = glm::mat4(1.0f);
 		mMeshTriangles = inputTriangles;
 		mTriangleNumber = mMeshTriangles.size();
 		int number = inputTriangles.size() * 3;
@@ -85,6 +86,7 @@ public:
 		unsigned int vertices = 3 * mTriangleNumber;
 		glDrawArrays(GL_TRIANGLES, 0, vertices);
 	}
+	glm::mat4 mModelMatrix;
 private:
 	//This is saved for ease of access and later raycast construction
 	std::vector<Triangle> mMeshTriangles;
