@@ -46,7 +46,12 @@ int main()
 	Mesh cubeMesh(MeshTriangles);
 
 	std::cout << cubeMesh.GetTriangleNumber() << " Triangles in the cube" << std::endl;
-	std::cout << cubeMesh.GetSizeOfMeshData() << " Triangles in the cube" << std::endl;
+	std::cout << cubeMesh.GetSizeOfMeshData() << " bytes in the mesh" << std::endl;
+
+	// --- RENDERABLE OBJECT
+	glm::vec3 objectPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::mat4 objectTransform = glm::mat4(1.0f);
+	objectTransform = glm::translate(objectTransform, objectPos);
 
 	/// --- CAMERA
 	//get a camera object
@@ -60,11 +65,6 @@ int main()
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
 	
-	// --- RENDERABLE
-	glm::vec3 objectPos = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::mat4 objectTransform = glm::mat4(1.0f);
-	objectTransform = glm::translate(objectTransform, objectPos);
-
 	RenderableObject renderCube(&cubeMesh, objectTransform);
 
 	float fov = 90.0f;

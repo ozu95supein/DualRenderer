@@ -77,7 +77,11 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
                     uvs[v].x = tx;
                     uvs[v].y = ty;
                 }
-
+                else
+                {
+                    uvs[v].x = 1.0f;
+                    uvs[v].y = 1.0f;
+                }
             }
             index_offset += fv;
             Vertex iv0 = Vertex(verts[0], normals[0], uvs[0]);

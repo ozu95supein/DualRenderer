@@ -4,7 +4,8 @@ class Triangle
 {
 public:
 	Triangle(){};
-	Triangle(Vertex v0, Vertex v1, Vertex v2) : mV0(v0), mV1(mV1), mV2(mV2) {}
+	Triangle(Vertex v0, Vertex v1, Vertex v2) : mV0(v0), mV1(v1), mV2(v2) {}
+
 	Vertex Get_V0()
 	{
 		return mV0;
