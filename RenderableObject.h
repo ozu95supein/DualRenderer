@@ -18,7 +18,7 @@ public:
 	{
 		mMesh->BindMeshVAO();
 		mMesh->Draw();
-	}
+	} 
 	//we are going to use this a ton anyways so i just make it public
 	glm::mat4 mTransform;
 private:

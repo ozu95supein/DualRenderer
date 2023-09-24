@@ -75,11 +75,24 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	// Specify the color of the background
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+
+	float rotSpeed = 0.5f;
+	float prevTime = glfwGetTime();
+	float currTime = glfwGetTime();
+	float dt = 0.0f;
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
+		//deal with time issues
+		float currTime = glfwGetTime();
+		dt = currTime - prevTime;
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//rotate the RenderCube
+		renderCube.mTransform = glm::rotate(renderCube.mTransform, dt * rotSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
+		// Handles camera inputs
+		myCam.Inputs(window, dt);
 
 		//activate the shader program
 		shaderProgram.Activate();
@@ -97,6 +110,8 @@ int main()
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
 		glfwPollEvents();
+
+		prevTime = currTime;
 	}
 
 	// Delete window before ending the program
