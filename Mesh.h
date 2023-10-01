@@ -38,6 +38,7 @@ public:
 			mMeshData.push_back(mMeshTriangles[i].Get_V2().texUV.x);
 			mMeshData.push_back(mMeshTriangles[i].Get_V2().texUV.y);
 		}
+		
 		//Initialize OpenGl
 		glGenVertexArrays(1, &mMeshVAO);
 		glGenBuffers(1, &mMeshVBO);
@@ -45,7 +46,7 @@ public:
 		glBindVertexArray(mMeshVAO);
 		//link VBO
 		glBindBuffer(GL_ARRAY_BUFFER, mMeshVBO);
-		glBufferData(GL_ARRAY_BUFFER, (sizeof(float) * mMeshData.size()), mMeshData.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, (sizeof(float) * mMeshData.size()), &mMeshData.front(), GL_STATIC_DRAW);
 		// position attribute
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
@@ -53,7 +54,7 @@ public:
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
 		//texture uv attribute
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
 		//unbind for now
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

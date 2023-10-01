@@ -27,6 +27,9 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
     if (!ret) {
         exit(1);
     }
+    //this is a boolean to check if the input file has only given use vertices without any normal and uv coordinates
+    bool MoreVertexInfo = true;
+
     // Loop over shapes/Meshes
     for (size_t s = 0; s < shapes.size(); s++) {
         // Loop over faces(polygon)
@@ -53,7 +56,6 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
                 verts[v].y = vy;
                 verts[v].z = vz;
 
-                //WE dont need normals for now
                 // Check if `normal_index` is zero or positive. negative = no normal data
                 if (idx.normal_index >= 0) {
                     tinyobj::real_t nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
@@ -68,8 +70,9 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
                     normals[v].x = 0.0f;
                     normals[v].y = 0.0f;
                     normals[v].z = 0.0f;
+                    MoreVertexInfo = false;
+
                 }
-                //I will need this in the future
                 // Check if `texcoord_index` is zero or positive. negative = no texcoord data
                 if (idx.texcoord_index >= 0) {
                     tinyobj::real_t tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
@@ -81,6 +84,7 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
                 {
                     uvs[v].x = 1.0f;
                     uvs[v].y = 1.0f;
+                    MoreVertexInfo = false;
                 }
             }
             index_offset += fv;
@@ -88,7 +92,15 @@ void LoadMeshFromFile(std::string inputfile, std::vector<Triangle>& mTriangles)
             Vertex iv1 = Vertex(verts[1], normals[1], uvs[1]);
             Vertex iv2 = Vertex(verts[2], normals[2], uvs[2]);
             //Vertex(glm::vec3 iposition, glm::vec3 inormal, glm::vec2 itexUV) 
-            Triangle currentT(iv0, iv1, iv2);
+            Triangle currentT;
+            if (MoreVertexInfo)
+            {
+                currentT = Triangle(iv0, iv1, iv2);
+            }
+            else
+            {
+                currentT = Triangle(iv0, iv1, iv2, MoreVertexInfo, glm::vec2(1.0f, 1.0f));
+            }
             mTriangles.push_back(currentT);
 
             // per-face material

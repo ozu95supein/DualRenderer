@@ -55,12 +55,11 @@ int main()
 
 	/// --- CAMERA
 	//get a camera object
-	Camera myCam;
 	glm::vec3 position(0.0f, 0.0f, -3.0f);
 	glm::vec3 target(0.0f);
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
-	glm::mat4 look = glm::lookAt(position, target, up);
-	myCam.SetMatrix(look);
+	Camera myCam(position, target, up);
+
 	/// --- SHADERS
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
@@ -75,7 +74,8 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	// Specify the color of the background
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-
+	/// --- TIME MANAGEMENT FOR DT
+	// Calculates stuff for the dt using glfwgettime
 	float rotSpeed = 0.5f;
 	float prevTime = glfwGetTime();
 	float currTime = glfwGetTime();
@@ -90,7 +90,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//rotate the RenderCube
-		renderCube.mTransform = glm::rotate(renderCube.mTransform, dt * rotSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
+		//renderCube.mTransform = glm::rotate(renderCube.mTransform, dt * rotSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
 		// Handles camera inputs
 		myCam.Inputs(window, dt);
 
